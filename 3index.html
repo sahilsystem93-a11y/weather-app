@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Stylish Weather App</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+  }
+  .weather-card {
+    background: rgba(0,0,0,0.6);
+    padding: 30px 40px;
+    border-radius: 25px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .weather-card h2 {
+    margin-bottom: 20px;
+    font-size: 26px;
+    text-shadow: 0 0 15px rgba(236,72,153,0.7);
+  }
+  input {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 70%;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+  button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    background: #f472b6;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  button:hover {
+    background: #ec4899;
+  }
+  #output {
+    margin-top: 18px;
+    font-size: 18px;
+    min-height: 60px;
+    text-shadow: 0 0 10px rgba(236,72,153,0.7);
+  }
+</style>
+</head>
+<body>
+  <div class="weather-card">
+    <h2>🌦 Stylish Weather App</h2>
+    <input id="city" placeholder="Enter city name" />
+    <button id="getWeather">Get Weather</button>
+    <div id="output"></div>
+  </div>
+
+<script>
+const apiKey = 'YOUR_OPENWEATHER_API_KEY'; // replace with your key
+const output = document.getElementById('output');
+document.getElementById('getWeather').addEventListener('click', async () => {
+  const city = document.getElementById('city').value.trim();
+  if(!city) return alert('Enter city name');
+  output.textContent = 'Loading...';
+  try {
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`);
+    if(!res.ok) throw new Error('City not found');
+    const data = await res.json();
+    output.innerHTML = `<strong>${data.name}</strong><br>${data.weather[0].description}<br>Temp: ${data.main.temp}°C`;
+  } catch(e) {
+    output.textContent = e.message;
+  }
+});
+</script>
+</body>
+</html>
